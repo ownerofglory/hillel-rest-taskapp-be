@@ -5,6 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import ua.ithillel.hilleltask.model.dto.TaskDTO;
 import ua.ithillel.hilleltask.model.dto.TaskListDTO;
+import ua.ithillel.hilleltask.model.dto.TaskMoveDTO;
 import ua.ithillel.hilleltask.service.TaskListService;
 import ua.ithillel.hilleltask.service.TaskService;
 
@@ -92,5 +93,13 @@ public class TaskListsResource {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @POST
+    @Path("/taskMove")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public TaskMoveDTO moveTask(TaskMoveDTO taskMoveDTO) {
+        return taskService.moveTask(taskMoveDTO);
     }
 }

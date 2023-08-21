@@ -68,12 +68,14 @@ public class TaskMySqlJdbcDao implements TaskDao {
         try {
             String sql = "UPDATE task  " +
                     "SET title = ?, " +
-                    " description = ? " +
+                    " description = ?, " +
+                    " task_list_id = ? " +
                     "WHERE id = ? ";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, task.getTitle());
             statement.setString(2, task.getDescription());
-            statement.setInt(3, task.getId());
+            statement.setInt(3, task.getTaskListId());
+            statement.setInt(4, task.getId());
             int rows = statement.executeUpdate();
 
             if (rows == 0) {

@@ -3,10 +3,11 @@ package ua.ithillel.hilleltask.service;
 import jakarta.inject.Inject;
 import org.jvnet.hk2.annotations.Service;
 import ua.ithillel.hilleltask.dao.TaskDao;
-import ua.ithillel.hilleltask.dao.TaskListDao;
 import ua.ithillel.hilleltask.exception.InconsistentEntityOperation;
 import ua.ithillel.hilleltask.model.Task;
 import ua.ithillel.hilleltask.model.dto.TaskDTO;
+import ua.ithillel.hilleltask.model.dto.TaskListDTO;
+import ua.ithillel.hilleltask.model.dto.TaskMoveDTO;
 import ua.ithillel.hilleltask.model.mapper.TaskMapper;
 
 import java.util.List;
@@ -43,13 +44,32 @@ public class TaskServiceDefault implements TaskService {
 
     @Override
     public TaskDTO editTask(Integer listId, Integer id, TaskDTO taskDTO) throws Exception {
-        if (id.equals(taskDTO.getId())) {
+        if (!id.equals(taskDTO.getId())) {
             throw new InconsistentEntityOperation(String.format("taskId '%d' doesn't much with id of task you've provided %d", id, taskDTO.getId()));
         }
 
         Task task = taskMapper.taskDTOToTask(taskDTO);
         Task updatedTask = taskDao.update(task);
         return taskMapper.taskToTaskDTO(updatedTask);
+    }
+
+    @Override
+    public TaskMoveDTO moveTask(TaskMoveDTO taskMoveDTO) {
+        TaskListDTO newList = taskMoveDTO.getNewList();
+        TaskListDTO oldList = taskMoveDTO.getOldList();
+        TaskDTO task = taskMoveDTO.getTask();
+
+        Task existingTask = taskDao.findById(task.getId());
+
+        existingTask.setTaskListId(newList.getId());
+        Task updatedTask = taskDao.update(existingTask);
+
+        TaskMoveDTO updatedTaskMoveDTO = new TaskMoveDTO();
+        updatedTaskMoveDTO.setNewList(newList);
+        updatedTaskMoveDTO.setOldList(oldList);
+        updatedTaskMoveDTO.setTask(taskMapper.taskToTaskDTO(updatedTask));
+
+        return updatedTaskMoveDTO;
     }
 
 }

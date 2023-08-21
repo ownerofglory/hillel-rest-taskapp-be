@@ -16,7 +16,7 @@ public class DatabaseConnectionFactory implements Factory<Connection> {
     @Override
     public Connection provide() {
         try {
-            if (CONN == null) {
+            if (CONN == null || CONN.isClosed()) {
                 CONN = JdbcConnectionUtil.getConnection(MYSQL_CONN_STR, MYSQL_USER, MYSQL_PASSWORD);
             }
             return CONN;
