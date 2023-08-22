@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="Hillel-Task-App">
+
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %5p [%t] %c{1} - %m%n"/>
+        </Console>
+
+        <File name="FILE" fileName="logs/application.log">
+            <PatternLayout>
+                <Pattern>%d %5p [%t] %c{1} - %m%n</Pattern>
+            </PatternLayout>
+        </File>
+
+        <RollingFile name="ROLLING_FILE" fileName="logs/app.log"
+                     filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d %5p [%t] %c{1} - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="FILE"/>
+            <AppenderRef ref="ROLLING_FILE"/>
+        </Root>
+    </Loggers>
+
+</Configuration>

@@ -20,4 +20,14 @@
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
 
+    <filter>
+        <filter-name>LoggingFilter</filter-name>
+        <filter-class>ua.ithillel.hilleltask.filter.LoggingFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>LoggingFilter</filter-name>
+        <url-pattern>/api/*</url-pattern>
+    </filter-mapping>
+
 </web-app>

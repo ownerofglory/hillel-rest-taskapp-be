@@ -3,6 +3,8 @@ package ua.ithillel.hilleltask;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.ithillel.hilleltask.model.dto.TaskDTO;
 import ua.ithillel.hilleltask.model.dto.TaskListDTO;
 import ua.ithillel.hilleltask.model.dto.TaskMoveDTO;
@@ -13,6 +15,8 @@ import java.util.List;
 
 @Path("lists")
 public class TaskListsResource {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskListsResource.class);
+
     @Inject
     private TaskListService taskListService;
     @Inject
@@ -21,6 +25,8 @@ public class TaskListsResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<TaskListDTO> getAllByBoard(@QueryParam("boardId") Integer boardId) {
+        LOGGER.info("Get All by board");
+        LOGGER.debug("Get All by board id {}", boardId);
         return taskListService.getTaskListsByBoardId(boardId);
     }
 
@@ -28,6 +34,8 @@ public class TaskListsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public TaskListDTO add(TaskListDTO taskListDTO) {
+        LOGGER.info("Add task list");
+        LOGGER.debug("Add task list {}", taskListDTO);
         return taskListService.createTaskList(taskListDTO);
     }
 
@@ -46,7 +54,8 @@ public class TaskListsResource {
         try {
             return taskListService.editTaskList(id, taskListDTO);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            LOGGER.error("Exception when editing a task list {}", e.getMessage());
+            throw new RuntimeException();
         }
     }
 
